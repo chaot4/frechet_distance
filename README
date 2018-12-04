@@ -1,0 +1,7 @@
+Build:
+======
+Simply execute the ./build.sh script and then you find the binaries in the build directory.
+
+Benchmarking:
+=============
+The experiments can be conducted using the binary "paper_experiments". To run certain experiments one has to manually edit "src/paper_experiments.cpp" and set the bools corresponding to the desired experiments to true. Furthermore, the paths to the curve directories and curve data files have to be adapted (in the same file). The benchmark data can be fetched and built using the scripts in test_data/benchmark.

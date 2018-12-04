@@ -1,0 +1,4 @@
+build
+.*.swp
+tools/OV-tools/
+test_data/benchmark_queries/
