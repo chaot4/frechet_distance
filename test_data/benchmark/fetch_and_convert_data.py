@@ -6,8 +6,7 @@
 
 echo "Downloading all the data..."
 wget 'https://download.microsoft.com/download/F/4/8/F4894AA5-FDBC-481E-9285-D5F8C4C4F039/Geolife%20Trajectories%201.3.zip'
-# TODO: replace by MPI link to spare Martin some bandwidth!
-wget 'https://www.martinwerner.de/files/shortest-sf.tgz'
+wget 'http://sfsp.mpi-inf.mpg.de/shortest-sf.tgz'
 wget 'https://archive.ics.uci.edu/ml/machine-learning-databases/character-trajectories/mixoutALL_shifted.mat'
 
 # extract
