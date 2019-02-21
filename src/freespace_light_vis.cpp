@@ -129,6 +129,31 @@ void FreespaceLightVis::exportFreespaceToSvg(std::string const& filename)
 				}
 			}
 		}
+
+		// write grid points
+		for (PointID i = 0; i < curve1.size(); ++i) {
+			for (PointID j = 0; j < curve2.size(); ++j) {
+				SvgCoordinate start;
+				start.x = i*(cell_width + line_thickness1);
+				start.y = j*(cell_width + line_thickness1) + line_thickness1/2;
+
+				SvgCoordinate end;
+				end.x = start.x + line_thickness1;
+				end.y = start.y;
+
+				start.y = height - start.y;
+				end.y = height - end.y;
+
+				Color color;
+				if (curve1[i].dist_sqr(curve2[j]) <= frechet.dist_sqr) {
+					color = Color::FreeCell;
+				}
+				else {
+					color = Color::EmptyCell;
+				}
+				writeLine(f, {start, end, line_thickness1, color, false});
+			}
+		}
 	}
 	if (draw_curves) {
 		writeCurves(f);
