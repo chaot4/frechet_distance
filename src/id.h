@@ -15,6 +15,7 @@ public:
 	static constexpr IDType invalid_value = std::numeric_limits<IDType>::max();
 
 	ID(IDType id = invalid_value) : id(id) {}
+	ID(ID<T> const& other) : id(other.id) {}
 
 	operator IDType() const { return id; }
 	IDType operator+(ID<T> other) const { return id + other.id; }
