@@ -24,16 +24,16 @@ public:
 	
 	FrechetLight() = default;
 	void buildFreespaceDiagram(distance_t distance, Curve const& curve1, Curve const& curve2);
-	bool lessThan(distance_t distance, Curve const& curve1, Curve const& curve2);
+	bool lessThan(distance_t distance, Curve const& curve1, Curve const& curve2) override;
 	bool lessThanWithFilters(distance_t distance, Curve const& curve1, Curve const& curve2);
 	distance_t calcDistance(Curve const& curve1, Curve const& curve2);
 	void clear();
 
 	CurvePair getCurvePair() const;
-	Certificate& computeCertificate();
+	Certificate& computeCertificate() override;
 	const Certificate& getCertificate() const { return cert; } 
 
-	void setPruningLevel(int pruning_level);
+	void setPruningLevel(int pruning_level) override;
 	void setRules(std::array<bool,5> const& enable) override;
 
 	std::size_t getNumberOfBoxes() const;
