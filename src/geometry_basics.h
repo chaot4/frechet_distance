@@ -3,6 +3,7 @@
 #include "defs.h"
 #include "id.h"
 
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
