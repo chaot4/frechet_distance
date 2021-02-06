@@ -11,7 +11,9 @@
 #include <vector>
 #include <iomanip>
 
+#ifdef WITH_OPENMP
 #include <omp.h>
+#endif
 
 namespace
 {
@@ -35,7 +37,11 @@ inline static bool isNear(Tree::Point const& a, Tree::Point const& b, distance_t
 Query::Query(std::string const& curve_directory)
 	: curve_directory(curve_directory)
 	, kd_tree(isNear)
+#ifdef WITH_OPENMP
 	, num_threads(omp_get_max_threads())
+#else
+	, num_threads(1)
+#endif
 	, thread_data_vec(num_threads)
 {
 }
@@ -182,7 +188,9 @@ void Query::run_parallel()
 	results.resize(query_elements.size());
 
 	global::times.startFrechetQuery();
+#ifdef WITH_OPENMP
 	#pragma omp parallel for schedule(guided) num_threads(num_threads)
+#endif
 	for (std::size_t i = 0; i < query_elements.size(); ++i) {
 		auto const& query_element = query_elements[i];
 		run_impl_parallel(query_element.curve, query_element.distance, results[i]);
@@ -331,7 +339,11 @@ void Query::run_impl_parallel(Curve const& curve, distance_t distance, Result& r
 	assert(is_ready);
 	assert(frechet != nullptr);
 
+#ifdef WITH_OPENMP
 	auto& thread_data = thread_data_vec[omp_get_thread_num()];
+#else
+	auto& thread_data = thread_data_vec[0];
+#endif
 	auto& frechet = *thread_data.frechet;
 	auto& candidates = thread_data.candidates;
 

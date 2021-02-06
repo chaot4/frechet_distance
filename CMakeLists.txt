@@ -10,7 +10,7 @@
 
 
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(frechet CXX)
 
 enable_testing()
@@ -32,12 +32,15 @@ else()
 	set(EXTRA_EXE_LINKER_FLAGS "" CACHE STRING "Extra flags used by the linker.")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS} -std=c++11 -fopenmp -fno-omit-frame-pointer")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EXTRA_EXE_LINKER_FLAGS} -fopenmp -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS} -std=c++11 -fno-omit-frame-pointer")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EXTRA_EXE_LINKER_FLAGS} -fno-omit-frame-pointer")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${EXTRA_EXE_LINKER_FLAGS_RELEASE}")
 set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} ${EXTRA_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
 
-
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+	add_compile_definitions(WITH_OPENMP)
+endif()
 
 option(VERBOSE "Verbose logging" OFF)
 if(NOT VERBOSE)
@@ -57,11 +60,17 @@ add_library(common OBJECT
 	src/times.cpp
 	src/curve.cpp
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(common PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 add_executable(frechet
 	src/main.cpp
 	$<TARGET_OBJECTS:common>
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(frechet PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 add_executable(run_tests
 	src/run_tests.cpp
@@ -78,7 +87,9 @@ add_executable(run_tests
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(run_tests PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(run_tests PROPERTIES
     COMPILE_FLAGS "-DVIS -DCERTIFY"
 )
@@ -97,7 +108,9 @@ add_executable(test_curves
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(test_curves PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(test_curves PROPERTIES
   COMPILE_FLAGS "-DVIS -DCERTIFY"
 )
@@ -116,7 +129,9 @@ add_executable(pruning_progress
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(pruning_progress PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(pruning_progress PROPERTIES
   COMPILE_FLAGS "-DVIS -DCERTIFY"
 )
@@ -135,7 +150,9 @@ add_executable(export_freespace_diagram
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(export_freespace_diagram PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(export_freespace_diagram PROPERTIES
   COMPILE_FLAGS "-DVIS -DCERTIFY"
 )
@@ -153,7 +170,9 @@ add_executable(compare_implementations
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(compare_implementations PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(compare_implementations PROPERTIES
   COMPILE_FLAGS "-DCERTIFY"
 )
@@ -172,7 +191,9 @@ add_executable(calc_frechet_distance
 	src/certificate.cpp
 	src/curve.cpp
 )
-
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(calc_frechet_distance PUBLIC OpenMP::OpenMP_CXX)
+endif()
 set_target_properties(calc_frechet_distance PROPERTIES
   COMPILE_FLAGS "-DVIS -DCERTIFY"
 )
@@ -181,11 +202,17 @@ add_executable(performance_test
 	src/performance_test.cpp
 	$<TARGET_OBJECTS:common>
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(performance_test PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 add_executable(paper_experiments
 	src/paper_experiments.cpp
 	$<TARGET_OBJECTS:common>
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(paper_experiments PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # add_executable(paper_experiments
 #     src/frechet_light.cpp
@@ -208,11 +235,17 @@ add_executable(create_benchmark
 	src/create_benchmark.cpp
 	$<TARGET_OBJECTS:common>
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(create_benchmark PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 add_executable(create_benchmark_decider
 	src/create_benchmark_decider.cpp
 	$<TARGET_OBJECTS:common>
 )
+if(OpenMP_CXX_FOUND)
+	target_link_libraries(create_benchmark_decider PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 
 # add_test(NAME unit-test
